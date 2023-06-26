@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% load static %}
+
+<!-- Navbar links control -->
+{% block links %}{% endblock %}
+
+<!-- Block NavBar Content -->
+{% block nav-content %}
+    <i class="fa-solid fa-unlock-keyhole ml-2 mb-3" style="color: #fff; font-size: 20px"></i>   &nbsp;&nbsp; <h2 style="color: #fff; font-size: 20px">Administration</h2>
+{% endblock %}
+
+<!-- Block Title -->
+<title>{% block title %} Grocery {% endblock %}</title>
+
+<!-- Logout Button -->
+{% block nav-btn %}
+    <a class="btn btn-custom" id="btn-nav-view" href="{% url 'grocery' %}">Back</a>
+    <a class="btn btn-custom" id="btn-nav-back" href="{% url 'backend' %}">Control Panel</a>
+    <a class="btn btn-custom" id="btn-nav" data-bs-toggle="modal" data-bs-target="#logout">Logout</a>
+{% endblock %}
+
+{% block topbar %}
+<div class="top-bar mt-4 pt-5">
+        <div class="container mt-5">
+            <div class="row align-items-center">
+                <div class="col-lg-4 col-md-12">
+                    <div class="logo">
+                        <img src="{% static 'img/icon.ico' %}" alt="Logo">
+                        <h1><span>M</span>I<span>S</span></h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+<!-- Block Footer -->
+{% block footer %} style="color: #ff7f7f;" {% endblock %}
+
+<!-- Page Content -->
+{% block content %}
+
+<!-- Display Car All Cars  -->
+<div class="container mb-5" style="width: 95%; font-size: 14px">
+    <button class="btn btn-outline w-100 mt-1 pt-1 mb-1 no-pointer">
+    </button>
+    <button class="btn btn-warning w-100 mt-4 pt-1 mb-1 no-pointer">
+        <i class="fa fa-shopping-basket"></i>&nbsp;&nbsp; GROCERY RECORDS
+    </button>
+
+    <!--Table-->
+    <div class="container">
+        <div class="row my-4">
+            <div class="col-md-12">
+            </div>
+            <div class="col-md-12 border-primary">
+                <table class="table bg-white">
+                    <thead class="bg-info">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Date</th>
+                            <th scope="col">Daily Sales</th>
+                            <th scope="col">Details</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for g in groc %}
+                        <tr>
+                            <td>{{ g.id }}</td>
+                            <td>{{ g.groc_sales_date }}</td>
+                            <td>{{ g.groc_daily_sales }}</td>
+                            <td><a href="{% url 'grocery_detail' g.id %}">
+                            <button type="button" class="w-50 btn btn-sm btn-outline-primary">View</button>
+                        </a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!--End Table-->
+    <a href="{% url 'view_all_grocery' %}">
+        <button class="btn btn-primary mt-1">View All...</button>
+    </a>
+
+</div> <!-- END // container -->
+
+{% endblock content %}
+
+<!-- Car wash Block -->
+{% block carwash %} {% endblock %}
+
+<!-- Restaurant Block -->
+{% block restaurant %} {% endblock %}
+
+<!-- Grocery Block -->
+{% block grocery %} {% endblock %}

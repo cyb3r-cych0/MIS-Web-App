@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load static %}
+
+<!-- Block Title -->
+<title>{% block title %} Backend {% endblock %}</title>
+
+<!-- Navbar links control -->
+{% block links %}{% endblock %}
+
+{% block topbar %}
+<div class="top-bar mt-4 pt-5">
+        <div class="container mt-5">
+            <div class="row align-items-center">
+                <div class="col-lg-4 col-md-12">
+                    <div class="logo">
+                        <img src="{% static 'img/icon.png' %}" alt="Logo">
+                        <h1><span>#</span>Auto<span>Spa</span></h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+<!-- Logout Button -->
+{% block nav-btn %}
+    <a class="btn btn-custom" id="btn-nav-back" href="{% url 'backend' %}" >Control Panel</a>
+    <a class="btn btn-custom" id="btn-nav" data-bs-toggle="modal" data-bs-target="#logout">Logout</a>
+{% endblock %}
+
+<!-- Block Footer -->
+{% block footer %} style="color: #ff7f7f;" {% endblock %}
+
+<!-- Block NavBar Content -->
+{% block nav-content %}
+    <i class="fa-solid fa-unlock-keyhole ml-2 mb-3" style="color: #fff; font-size: 20px"></i>   &nbsp;&nbsp; <h2 style="color: #fff; font-size: 20px">Administration</h2>
+{% endblock %}
+
+<!-- Page Content -->
+{% block content %}
+    <br>
+    <div class="container">
+        <!-- links|cards -->
+        <button class="btn btn-warning w-100 mt-4 mb-2 no-pointer">
+            <i class="fas fa-tools"></i>&nbsp;&nbsp;SERVICE BAY
+        </button>
+        <div class="card p-3 mt-2">
+            <div class="row">
+                {% include 'components/cards/service_bay_cards.html' %}
+            </div>
+        </div>
+
+        <!--Section 2 (next class)-->
+
+    </div> <!-- END // container -->
+{% endblock content %}
+
+<!-- Car wash Block -->
+{% block carwash %} {% endblock %}
+
+<!-- Restaurant Block -->
+{% block restaurant %} {% endblock %}
+
+<!-- Grocery Block -->
+{% block grocery %} {% endblock %}

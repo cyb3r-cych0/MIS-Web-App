@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% load static %}
+
+<!-- Navbar links control -->
+{% block links %}{% endblock %}
+
+<!-- Block NavBar Content -->
+{% block nav-content %}
+    <i class="fa-solid fa-unlock-keyhole ml-2 mb-3" style="color: #fff; font-size: 20px"></i>   &nbsp;&nbsp; <h2 style="color: #fff; font-size: 20px">Administration</h2>
+{% endblock %}
+
+<!-- Block Title -->
+<title>{% block title %} Grocery {% endblock %}</title>
+
+<!-- Logout Button -->
+{% block nav-btn %}
+    <a class="btn btn-custom" id="btn-nav-view" href="{% url 'grocery' %}">Back</a>
+    <a class="btn btn-custom" id="btn-nav-back" href="{% url 'backend' %}" >Control Panel</a>
+    <a class="btn btn-custom" id="btn-nav" data-bs-toggle="modal" data-bs-target="#logout">Logout</a>
+{% endblock %}
+
+{% block topbar %}
+<div class="top-bar mt-4 pt-5">
+        <div class="container mt-5">
+            <div class="row align-items-center">
+                <div class="col-lg-4 col-md-12">
+                    <div class="logo">
+                        <img src="{% static 'img/icon.ico' %}" alt="Logo">
+                        <h1><span>M</span>I<span>S</span></h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+<!-- Block Footer -->
+{% block footer %} style="color: #ff7f7f;" {% endblock %}
+
+<!-- Page Content -->
+{% block content %}
+<br>
+    <div class="container mt-1 mb-5 pb-2">
+        <!-- links|cards -->
+        <button class="btn btn-warning w-100 mt-3 mb-2 no-pointer">
+            <i class="fa-solid fa-circle-info"></i>&nbsp;&nbsp;GROCERY DETAILS
+        </button>
+        <div id="pt">
+            <div class="card p-3 mt-3 mb-4">
+                <div class="row" >
+                    <h3>Grocery Details</h3>
+                    <h4>{{ groc.groc_sales_date|date:"M d Y" }}<small class="text-body-secondary fw-light" style="font-size: 17px">&nbsp;&nbsp;&nbsp;</small></h4>
+                    <div class="container m-3">
+                        {% if groc.groc_daily_sales %}
+                        <p>Gross Sales: {{ groc.groc_daily_sales }}</p>
+                        {% endif %}
+
+                        {% if groc.groc_daily_expenses %}
+                            <p>Expenses: {{ groc.groc_daily_expenses }}</p>
+                        {% endif %}
+
+                        {% if groc.groc_net_sales %}
+                            <p>Net Sales: {{ groc.groc_net_sales }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-6">
+            <a href="/delete_groc_data/{{ groc.id }}">
+                <button type="button" class="btn btn-outline-secondary m-1 p-2">Delete</button>
+            </a>
+            <a href="/update_groc_data/{{ groc.id }}">
+                <button type="button" class="btn btn-outline-primary m-1 p-2">Update</button>
+            </a>
+            <a href="{% url 'grocery' %}">
+                <button onclick="myfun('pt')" type="button" class="btn btn-outline-success m-1 p-2">Print</button>
+            </a>
+        </div>
+    <button class="btn w-100 mt-3 mb-5 no-pointer"></button>
+</div> <!-- END // container -->
+
+<script type="text/javascript">
+    function myfun(pa){
+    var bk = document.body.innerHTML;
+    var dv = document.getElementById(pa).innerHTML;
+        document.body.innerHTML = dv;
+        window.print();
+    }
+</script>
+
+{% endblock content %}
+
+<!-- Car wash Block -->
+{% block carwash %} {% endblock %}
+
+<!-- Restaurant Block -->
+{% block restaurant %} {% endblock %}
+
+<!-- Grocery Block -->
+{% block grocery %} {% endblock %}

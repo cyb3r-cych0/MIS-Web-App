@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load static %}
+
+<!-- Block Title -->
+<title>{% block title %} MIS - Car Wash {% endblock %}</title>
+
+<!-- Block NavBar Content -->
+{% block nav-content %}
+    <i class="fa-solid fa-car mb-2 ml-2 " style="color: #fff; font-size: 20px"></i>   &nbsp;&nbsp; <h2 style="color: #fff; font-size: 20px; margin-right: 200px;">Car Wash</h2>
+{% endblock %}
+
+
+{% block content %}
+<!-- Page Header Start -->
+<div class="page-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h2>Car Wash</h2>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Page Header End -->
+{% endblock content %}
+
+<!-- Restaurant Block -->
+{% block restaurant %} {% endblock %}
+
+<!-- Groceries Block -->
+{% block grocery %} {% endblock %}
+

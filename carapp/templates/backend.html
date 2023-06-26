@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% load static %}
+
+<!-- Block Title -->
+<title>{% block title %} MIS - Control Panel {% endblock %}</title>
+
+<!-- Navbar links control -->
+{% block links %}{% endblock %}
+
+<!-- Block NavBar Content -->
+{% block nav-content %}
+    <i class="fa-solid fa-unlock-keyhole ml-2 mb-3" style="color: #fff; font-size: 20px"></i>   &nbsp;&nbsp; <h2 style="color: #fff; font-size: 20px">Administration</h2>
+{% endblock %}
+
+<!-- Logout Button -->
+{% block nav-btn %}
+    <a class="btn btn-custom" id="btn-nav-home" href="{% url 'frontend' %}" >Home</a>
+    <a class="btn btn-custom" id="btn-nav" data-bs-toggle="modal" data-bs-target="#logout">Logout</a>
+{% endblock %}
+
+<!-- Block TopBar -->
+{% block topbar %}
+<div class="top-bar mt-4 pt-5">
+        <div class="container mt-5">
+            <div class="row align-items-center">
+                <div class="col-lg-12 col-md-12">
+                    <div class="logo">
+                        <img src="{% static 'img/icon.png' %}" alt="Logo">
+                        <h1><span>M</span>I<span>S</span></h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+<!-- Block Footer -->
+{% block footer %} style="color: #ff7f7f;" {% endblock %}
+
+<!-- Page Content -->
+{% block content %}
+    <br>
+    <div class="container mb-5" style="width: 95%; font-size: 14px">
+        <!-- links|cards -->
+        <button class="btn btn-warning w-100 mb-4 mt-3 no-pointer">
+            <i class="fas fa-tools"></i>&nbsp;&nbsp;CONTROL PANEL
+        </button>
+        <div class="card p-3 mt-2">
+            <div class="row">
+                {% include 'components/cards/all_cards.html' %}
+            </div>
+        </div>
+
+        <!--Section 2 (next class)-->
+
+    </div> <!-- END // container -->
+    <div class="top-bar mt-4 mb-4 pt-5">
+
+    </div>
+{% endblock content %}
+
+<!-- Car wash Block -->
+{% block carwash %} {% endblock %}
+
+<!-- Restaurant Block -->
+{% block restaurant %} {% endblock %}
+
+<!-- Grocery Block -->
+{% block grocery %} {% endblock %}

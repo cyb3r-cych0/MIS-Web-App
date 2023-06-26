@@ -1,0 +1,309 @@
+{% extends 'base.html' %}
+{% load static %}
+
+<!-- Navbar links control -->
+{% block links %}{% endblock %}
+
+<!-- Block NavBar Content -->
+{% block nav-content %}
+    <i class="fa-solid fa-unlock-keyhole ml-2 mb-3" style="color: #fff; font-size: 20px"></i>   &nbsp;&nbsp; <h2 style="color: #fff; font-size: 20px">Administration</h2>
+{% endblock %}
+
+<!-- Block Title -->
+<title>{% block title %} MIS - All Reports {% endblock %}</title>
+
+<!-- Logout Button -->
+{% block nav-btn %}
+    <a class="btn btn-custom" id="btn-nav-back" href="{% url 'backend' %}">Control Panel</a>
+    <a class="btn btn-custom" id="btn-nav" data-bs-toggle="modal" data-bs-target="#logout">Logout</a>
+{% endblock %}
+
+{% block topbar %}
+<div class="top-bar mt-4 pt-5">
+        <div class="container mt-5">
+            <div class="row align-items-center">
+                <div class="col-lg-4 col-md-12">
+                    <div class="logo">
+                        <img src="{% static 'img/icon.ico' %}" alt="Logo">
+                        <h1><span>M</span>I<span>S</span></h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+<!-- Block Footer -->
+{% block footer %} style="color: #ff7f7f;" {% endblock %}
+
+<!-- Page Content -->
+{% block content %}
+
+<!-- Display Car All Cars  -->
+<div class="container mb-5" style="width: 95%; font-size: 14px">
+    <button class="btn btn-warning w-100 mt-5 pt-1 mb-1 no-pointer">
+        <i class="fa-solid fa-file-lines"></i>&nbsp;&nbsp; COMPANY REPORTS
+    </button>
+
+    <!--Topside Cars-->
+    <div class="container">
+        <div class="row mt-4">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header bg-info text-white">
+                        CAR WASH INFO
+                    </div>
+                    <div class="card-body text-secondary">
+                        <marquee behavior="" direction="">
+                            <h3 class="my-4">Total Income & Car Wash Information</h3>
+                        </marquee>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header bg-info text-white">
+                        CARS WASH INCOME STATS
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <a class="text-decoration-none text-dark" href="{% url 'carwash_statistics' %}">
+                                    <div class="card my-card shadow text-center p-3 text-primary">
+                                        <h4>Gross Income <br> <i class="fa-solid fa-money-bill-trend-up"></i></h4>
+                                        <h3>{{ cars_sales_total }}</h3>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-md-4">
+                                <a class="text-decoration-none text-dark" href="{% url 'carwash_statistics' %}">
+                                    <div class="card my-card shadow text-center p-3 text-warning">
+                                        <h4>Expenses <br> <i class="fa-solid fa-money-bill-transfer"></i></h4>
+                                        <h3>{{ total_expenses }}</h3>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-md-4">
+                                <a class="text-decoration-none text-dark" href="{% url 'carwash_statistics' %}">
+                                    <div class="card my-card shadow text-center p-3 text-success">
+                                        <h4>Net Sales <br> <i class="fa-solid fa-sack-dollar"></i></h4>
+                                        <h3>{{ net_sales }}</h3>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--End Topside-->
+
+    <!--Topside Restaurant-->
+    <div class="container">
+        <div class="row mt-4">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header bg-info text-white">
+                        RESTAURANT INFO
+                    </div>
+                    <div class="card-body text-secondary">
+                        <marquee behavior="" direction="">
+                            <h3 class="my-4">Total Sales & Restaurant Information</h3>
+                        </marquee>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header bg-info text-white">
+                        RESTAURANT INCOME STATS
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <a class="text-decoration-none text-dark" href="{% url 'restaurant_statistics' %}">
+                                    <div class="card my-card shadow text-center p-3 text-primary">
+                                        <h4>Gross Sales <br> <i class="fa-solid fa-money-bill-trend-up"></i></h4>
+                                        <h3>{{ rest_sales_total }}</h3>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-md-4">
+                                <a class="text-decoration-none text-dark" href="{% url 'restaurant_statistics' %}">
+                                    <div class="card my-card shadow text-center p-3 text-warning">
+                                        <h4>Expenses <br> <i class="fa-solid fa-money-bill-transfer"></i></h4>
+                                        <h3>{{ rest_expenses_total }}</h3>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-md-4">
+                                <a class="text-decoration-none text-dark" href="{% url 'restaurant_statistics' %}">
+                                    <div class="card my-card shadow text-center p-3 text-success">
+                                        <h4>Net Sales <br> <i class="fa-solid fa-sack-dollar"></i></h4>
+                                        <h3>{{ rest_net_total }}</h3>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--End Topside-->
+
+    <!--Topside Grocery-->
+    <div class="container">
+        <div class="row mt-4">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header bg-info text-white">
+                        GROCERY INFO
+                    </div>
+                    <div class="card-body text-secondary">
+                        <marquee behavior="" direction="">
+                            <h3 class="my-4">Total Sales  & Grocery Information</h3>
+                        </marquee>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header bg-info text-white">
+                        GROCERY INCOME STATS
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <a class="text-decoration-none text-dark" href="{% url 'grocery_statistics' %}">
+                                    <div class="card my-card shadow text-center p-3 text-primary">
+                                        <h4>Gross Sales <br> <i class="fa-solid fa-money-bill-trend-up"></i></h4>
+                                        <h3>{{ groc_sales_total }}</h3>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-md-4">
+                                <a class="text-decoration-none text-dark" href="{% url 'grocery_statistics' %}">
+                                    <div class="card my-card shadow text-center p-3 text-warning">
+                                        <h4>Expenses <br>  <i class="fa-solid fa-money-bill-transfer"></i></h4>
+                                        <h3>{{ groc_expenses_total }}</h3>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-md-4">
+                                <a class="text-decoration-none text-dark" href="{% url 'grocery_statistics' %}">
+                                    <div class="card my-card shadow text-center p-3 text-success">
+                                        <h4>Net Sales <br> <i class="fa-solid fa-sack-dollar"></i></h4>
+                                        <h3>{{ groc_net_total }}</h3>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--End Topside-->
+
+    <!--Topside Company-->
+    <div class="container">
+        <div class="row mt-4">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header bg-info text-black">
+                        COMPANY INFO
+                    </div>
+                    <div class="card-body text-secondary">
+                        <marquee behavior="" direction="">
+                            <h3 class="my-4">Company Value</h3>
+                        </marquee>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header bg-info text-black">
+                        COMPANY INCOME STATS
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <a class="text-decoration-none text-dark  bg-secondary" href="">
+                                    <div class="card my-card shadow text-center p-3 bg-primary">
+                                        <h4>Gross Income <br> <i class="fa-solid fa-money-bill-trend-up"></i></h4>
+                                        <h3>{{ gross_income_total }}</h3>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-md-4">
+                                <a class="text-decoration-none text-dark bg-secondary" href="">
+                                    <div class="card my-card shadow text-center p-3 bg-warning">
+                                        <h4>Expenses <br>  <i class="fa-solid fa-money-bill-transfer"></i></h4>
+                                        <h3>{{ expenses_total }}</h3>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-md-4">
+                                <a class="text-decoration-none text-dark bg-secondary" href="">
+                                    <div class="card my-card shadow text-center p-3 bg-success">
+                                        <h4>Net Income <br> <i class="fa-solid fa-sack-dollar"></i></h4>
+                                        <h3>{{ net_income_total }}</h3>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--End Topside-->
+
+    <button class="btn btn-secondary w-100 mt-5 pt-1 mb-1 no-pointer">
+        <i class="fa-solid fa-file-lines"></i>&nbsp;&nbsp; GRAPHS & VISUAL REPORT
+    </button>
+
+<div>
+  <canvas id="myChart"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{% static 'js/node_modules/chartjs/dist/chart.umd.js' %}"></script>
+
+
+<script>
+  const ctx = document.getElementById('myChart');
+
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+      datasets: [{
+        label: '# of Votes',
+        data: [12, 19, 3, 5, 2, 3],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+</script>
+
+</div>
+{% endblock content %}
+
+<!-- Car wash Block -->
+{% block carwash %} {% endblock %}
+
+<!-- Restaurant Block -->
+{% block restaurant %} {% endblock %}
+
+<!-- Grocery Block -->
+{% block grocery %} {% endblock %}

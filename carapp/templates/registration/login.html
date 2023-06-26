@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+<!-- Block Title -->
+<title>{% block title %} MIS - Login {% endblock %}</title>
+
+<!-- Navbar links control -->
+{% block links %}{% endblock %}
+
+<!-- Block NavBar Content -->
+{% block nav-content %}
+<i class="fas fa-key" style="color: #fff; font-size: 20px"></i>   &nbsp;&nbsp; <h2 style="color: #fff; font-size: 20px">Login</h2>
+{% endblock %}
+
+<!-- Logout Button -->
+{% block nav-btn %}
+<a href="{% url 'frontend' %}" class="btn btn-custom" id="btn-nav">Go Back</a>
+{% endblock %}
+
+<!-- Block TopBar -->
+{% block topbar %}
+<div class="top-bar mt-4 pt-5">
+        <div class="container mt-5">
+            <div class="row align-items-center">
+                <div class="col-lg-4 col-md-12">
+                    <div class="logo">
+                        <img src="{% static 'img/icon.png' %}" alt="Logo">
+                        <h1><span>M</span>I<span>S</span></h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+<!-- Block Footer -->
+{% block footer %} style="color: #d3d3d3;" {% endblock %}
+
+<!-- Page Contentt -->
+{% block content %}
+<style>body{overflow: hidden;}</style>
+<br><br><br><br>
+<div class="container card p-3 border-dark mt-1 mb-5" style="width: 30%;">
+    <!-- Title -->
+    <div class="text">RESTRICTED ACCESS</div>
+    <hr>
+    <!-- Form -->
+    <form method="POST" autocomplete="off" novalidate>
+        {% csrf_token %}
+        {{ form|crispy }}
+        <br>
+        <button type="submit" class="w-100 btn btn-secondary">LOGIN</button>
+    </form>
+    <div class="mb-4"></div>
+</div>
+{% endblock content %}
+
+<!-- Car wash Block -->
+{% block carwash %} {% endblock %}
+
+<!-- Restaurant Block -->
+{% block restaurant %} {% endblock %}
+
+<!-- Grocery Block -->
+{% block grocery %} {% endblock %}

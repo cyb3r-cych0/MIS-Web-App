@@ -1,0 +1,148 @@
+{% extends 'base.html' %}
+{% load static %}
+
+<!-- Navbar links control -->
+{% block links %}{% endblock %}
+
+<!-- Block Title -->
+<title>{% block title %} Restaurant {% endblock %}</title>
+
+
+<!-- Logout Button -->
+{% block nav-btn %}
+    <a class="btn btn-custom" id="btn-nav-back" href="{% url 'view_more_restaurant' %}" >Back</a>
+    <a class="btn btn-custom" id="btn-nav-panel" href="{% url 'backend' %}" >Control Panel</a>
+    <a class="btn btn-custom" id="btn-nav" data-bs-toggle="modal" data-bs-target="#logout">Logout</a>
+{% endblock %}
+
+{% block nav-content %}
+<i class="fa-solid fa-utensils ml-2 mb-3" style="color: #fff; font-size: 20px"></i>   &nbsp;&nbsp; <h2 style="color: #fff; font-size: 20px">Restaurant</h2>
+{% endblock %}
+
+<!-- Block Footer -->
+{% block footer %} style="color: #ff7f7f;" {% endblock %}
+
+<!-- Block TopBar -->
+{% block topbar %}
+<div class="top-bar mt-4 pt-5">
+        <div class="container mt-5">
+            <div class="row align-items-center">
+                <div class="col-lg-12 col-md-12">
+                    <div class="logo">
+                        <img src="{% static 'img/icon.png' %}" alt="Logo">
+                        <h1><span>M</span>I<span>S</span></h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+<!-- Page Content -->
+{% block content %}
+
+<br>
+<div class="container mb-5" style="width: 95%; font-size: 14px">
+    <!-- Display Restaurant Report -->
+    <button class="btn btn-warning w-100 mt-4 mb-2 no-pointer">
+        <i class="fa-solid fa-file-lines"></i>&nbsp;&nbsp; RESTAURANT REPORT
+    </button>
+
+    <!--Topside-->
+    <div class="container">
+        <div class="row mt-4">
+            <div class="col-md-4">
+                <div class="card border-secondary">
+                    <div class="card-header bg-info text-black bg-white border-secondary">
+                        INFO DISPLAY
+                    </div>
+                    <div class="card-body">
+                        <marquee behavior="" direction="">
+                            <h3 class="my-4 fg-info text-secondary">Total Sales Information</h3>
+                        </marquee>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header bg-info text-black bg-white border-secondary">
+                        INCOME STATISTICS
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <a class="text-decoration-none text-dark" href="">
+                                    <div class="card my-card shadow text-center p-3 bg-primary">
+                                        <h4>Gross Sales <br> <i class="fa-solid fa-money-bill-trend-up"></i></h4>
+                                        <h3>{{ total_income }}</h3>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-md-4">
+                                <a class="text-decoration-none text-dark" href="">
+                                    <div class="card my-card shadow text-center p-3 bg-warning">
+                                        <h4>Expenses <br> <i class="fa-solid fa-money-bill-transfer"></i></h4>
+                                        <h3>{{ sum_expenses }}</h3>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-md-4">
+                                <a class="text-decoration-none text-dark" href="">
+                                    <div class="card my-card shadow text-center p-3 bg-success">
+                                        <h4>Net Sales <br>  <i class="fa-solid fa-sack-dollar"></i></h4>
+                                        <h3>{{ net_value }}</h3>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--End Topside-->
+
+    <button class="btn btn-secondary w-100 mt-5 mb-2 pt-1 no-pointer">
+        <i class="fa-solid fa-file-lines"></i>&nbsp;&nbsp; DETAILED RESTAURANT REPORT
+    </button>
+
+    <hr>
+
+
+    <form method="POST">
+        {% csrf_token %}
+        From: <input type="date" name="from_date">
+        To: <input type="date" name="to_date">
+        <input type="submit" value="Search">
+
+    <hr>
+        <table border="2">
+            <tr>
+                <th>ID</th>
+                <th>Sales Date</th>
+                <th>Total Sales</th>
+            </tr>
+            {% for r_data in rest %}
+           <tr>
+               <td>{{ r_data.id }}</td>
+               <td>{{ r_data.rest_sales_date }}</td>
+               <td>{{ r_data.rest_daily_sales }}</td>
+           </tr>
+            {% endfor %}
+        </table>
+
+    </form>
+    <a href="{% url 'export_csv_restaurant' %}">
+        <button class="btn btn-primary mt-1">Download CSV</button>
+    </a>
+</div>
+{% endblock content %}
+
+<!-- Car wash Block -->
+{% block carwash %} {% endblock %}
+
+<!-- Restaurant Block -->
+{% block restaurant %} {% endblock %}
+
+<!-- Grocery Block -->
+{% block grocery %} {% endblock %}

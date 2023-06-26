@@ -1,0 +1,182 @@
+{% extends 'base.html' %}
+{% load static %}
+
+<!-- Navbar links control -->
+{% block links %}{% endblock %}
+
+<!-- Block Title -->
+<title>{% block title %} Car Wash {% endblock %}</title>
+
+
+<!-- Logout Button -->
+{% block nav-btn %}
+    <a class="btn btn-custom" id="btn-nav-back" href="{% url 'backend' %}" >Control Panel</a>
+    <a class="btn btn-custom" id="btn-nav" data-bs-toggle="modal" data-bs-target="#logout">Logout</a>
+{% endblock %}
+
+{% block nav-content %}
+<i class="fa-solid fa-unlock-keyhole ml-2 mb-3" style="color: #fff; font-size: 20px"></i>   &nbsp;&nbsp; <h2 style="color: #fff; font-size: 20px">Administration</h2>
+{% endblock %}
+
+<!-- Block Footer -->
+{% block footer %} style="color: #ff7f7f;" {% endblock %}
+
+<!-- Block TopBar -->
+{% block topbar %}
+<div class="top-bar mt-4 pt-5">
+        <div class="container mt-5">
+            <div class="row align-items-center">
+                <div class="col-lg-12 col-md-12">
+                    <div class="logo">
+                        <img src="{% static 'img/icon.ico' %}" alt="Logo">
+                        <h1><span>M</span>I<span>S</span></h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+<!-- Page Content -->
+{% block content %}
+
+<br>
+<div class="container mb-5" style="width: 95%; font-size: 14px">
+    <!--  -->
+    <button class="btn btn-warning w-100 mt-4 mb-2 no-pointer">
+        <i class="fa fa-car-on"></i>&nbsp;&nbsp; CAR WASH
+    </button>
+
+    <!-- Message From BackEnd -->
+    {% for message in messages %}
+        {% if message.tags == 'success' %}
+            <div class="text-center alert alert-primary alert-dismissible fade show" role="alert">{{ message }}
+                <a href="{% url 'view_more' %}" type="button" class="btn btn-close" data-bs-dismiss="alert" aria-label="Close"></a>
+            </div>
+        {% elif message.tags == 'error' %}
+            <div class="text-center alert alert-primary alert-dismissible fade show" role="alert">{{ message }}
+                <a href="{% url 'view_more' %}" type="button" class="btn btn-close" data-bs-dismiss="alert" aria-label="Close"></a>
+            </div>
+        {% endif %}
+    {% endfor%}
+
+    <!--Topside-->
+    <div class="container">
+        <div class="row mt-4">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header bg-info text-white">
+                        INFORMATION
+                    </div>
+                    <div class="card-body">
+                        <marquee behavior="" direction="">
+                            <h3 class="my-4"> Car Information</h3>
+                        </marquee>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header bg-info text-white">
+                        INCOME STATISTICS
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <a class="text-decoration-none text-dark" href="{% url 'carwash_statistics' %}">
+                                    <div class="card my-card shadow text-center p-3">
+                                        <h4><i class="fa-solid fa-calendar-check"></i></h4>
+                                        <h3>{{ year }} </h3>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-md-4">
+                                <a class="text-decoration-none text-dark" href="{% url 'carwash_statistics' %}">
+                                    <div class="card my-card shadow text-center p-3">
+                                        <h4><i class="fa-solid fa-calendar-days"></i></h4>
+                                        <h3>{{ month }}</h3>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-md-4">
+                                <a class="text-decoration-none text-dark" href="{% url 'carwash_statistics' %}">
+                                    <div class="card my-card shadow text-center p-3">
+                                        <h4><i class="fa-solid fa-sack-dollar"></i></h4>
+                                        <h3>{{ net_value }}</h3>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--End Topside-->
+
+    <!-- Add Car Details -->
+    <div class="container py-3">
+        <div class="col">
+            <div class="card mb-5 rounded-3 shadow-sm border-success">
+              <div class="card-header py-3 text-bg-success border-success">
+                <h6 class="my-0 fw-normal">ADD NEW CAR FOR WASHING</h6>
+              </div>
+              <div class="card-body">
+                <div class="container mb-2">
+                    <p>Example:  </p>
+                    <ul>
+                        <li>Car Model</li>
+                        <li>Car Number</li>
+                        <li>Car Owner</li>
+                        <li>Car Wtc</li>
+                    </ul>
+                </div>
+                <a href="/add">
+                    <button type="button" class="w-90 btn btn-lg btn-outline-primary m-2">ADD CAR</button>
+                </a>
+                <a href="{% url 'view_more' %}">
+                    <button class="btn btn-primary mb-1 ml-5">View More Cars...</button>
+                </a>
+              </div>
+            </div>
+        </div>
+
+    </div> <!-- END // container -->
+
+    <!-- Add CarWash Expense Details -->
+    <div class="container py-3">
+        <div class="col">
+            <div class="card mb-5 rounded-3 shadow-sm border-warning">
+              <div class="card-header py-3 text-bg-warning border-warning">
+                <h6 class="my-0 fw-normal">ADD COMMISSIONING & MISC. EXPENSES</h6>
+              </div>
+              <div class="card-body">
+                <div class="container mb-2">
+                    <p>Example:  </p>
+                    <ul>
+                        <li>Daily Income</li>
+                        <li>Daily Commissioning</li>
+                        <li>Miscellaneous</li>
+                    </ul>
+                </div>
+                <a href="/add_expense">
+                    <button type="button" class="w-90 btn btn-lg btn-outline-primary m-2">ADD EXPENSE</button>
+                </a>
+                <a href="{% url 'view_more_expense' %}">
+                    <button class="btn btn-primary mb-1 ml-5">View More Expenses...</button>
+                </a>
+              </div>
+            </div>
+        </div>
+    </div> <!-- END // container -->
+</div>
+{% endblock content %}
+
+<!-- Car wash Block -->
+{% block carwash %} {% endblock %}
+
+<!-- Restaurant Block -->
+{% block restaurant %} {% endblock %}
+
+<!-- Grocery Block -->
+{% block grocery %} {% endblock %}

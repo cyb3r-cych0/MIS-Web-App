@@ -1,0 +1,6 @@
+{% extends 'components/cards/base_card.html' %}
+
+{% block link %} fa-solid fa-wrench {% endblock %}
+{% block link-title %} Service
+<a href="{% url 'service_center' %}"><button class="btn btn-secondary w-100 p-1 m-1">Proceed</button></a>
+{% endblock %}

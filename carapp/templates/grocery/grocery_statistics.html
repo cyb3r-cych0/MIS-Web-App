@@ -1,0 +1,264 @@
+{% extends 'base.html' %}
+{% load static %}
+
+<!-- Navbar links control -->
+{% block links %}{% endblock %}
+
+<!-- Block NavBar Content -->
+{% block nav-content %}
+    <i class="fa-solid fa-unlock-keyhole ml-2 mb-3" style="color: #fff; font-size: 20px"></i>   &nbsp;&nbsp; <h2 style="color: #fff; font-size: 20px">Administration</h2>
+{% endblock %}
+
+<!-- Block Title -->
+<title>{% block title %} Grocery - Statistics {% endblock %}</title>
+
+<!-- Logout Button -->
+{% block nav-btn %}
+    <a class="btn btn-custom" id="btn-nav-view" href="{% url 'grocery' %}">Back</a>
+    <a class="btn btn-custom" id="btn-nav-back" href="{% url 'backend' %}">Control Panel</a>
+    <a class="btn btn-custom" id="btn-nav" data-bs-toggle="modal" data-bs-target="#logout">Logout</a>
+{% endblock %}
+
+{% block topbar %}
+<div class="top-bar mt-4 pt-5">
+        <div class="container mt-5">
+            <div class="row align-items-center">
+                <div class="col-lg-4 col-md-12">
+                    <div class="logo">
+                        <img src="{% static 'img/icon.ico' %}" alt="Logo">
+                        <h1><span>M</span>I<span>S</span></h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+<!-- Block Footer -->
+{% block footer %} style="color: #ff7f7f;" {% endblock %}
+
+<!-- Page Content -->
+{% block content %}
+
+<!-- Display Car All Cars  -->
+<div class="container mb-5" style="width: 95%; font-size: 14px">
+    <button class="btn btn-outline w-100 mt-1 pt-1 mb-1 no-pointer">
+    </button>
+    <button class="btn btn-warning w-100 mt-4 pt-1 mb-1 no-pointer">
+        <i class="fa fa-car-on"></i>&nbsp;&nbsp; GROCERY STATISTICS
+    </button>
+
+    <!--Topside-->
+    <div class="container">
+        <div class="row mt-4">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header bg-info text-white">
+                        INFO
+                    </div>
+                    <div class="card-body">
+                        <marquee behavior="" direction="">
+                            <h3 class="my-4">Current Day's, Week's & Month's Income</h3>
+                        </marquee>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header bg-info text-white">
+                        INCOME STATS
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <a class="text-decoration-none text-dark" href="{% url 'view_all_grocery' %}">
+                                    <div class="card my-card shadow text-center p-3 text-secondary">
+                                        <h4><i class="fa-solid fa-calendar-day"></i></h4>
+                                        {% for d_income in daily_income %}
+                                        {% if forloop.last or d_income.count == 1 %}
+                                        <h6>{{ d_income.day }}</h6>
+                                        <h3>{{ d_income.total_amount }}</h3>
+                                        {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-md-4">
+                                <a class="text-decoration-none text-dark" href="{% url 'view_all_grocery' %}">
+                                    <div class="card my-card shadow text-center p-3 text-secondary">
+                                        <h4><i class="fa-solid fa-calendar-week"></i></h4>
+                                        {% for w_income in weekly_income %}
+                                        {% if forloop.last or w_income.count == 1 %}
+                                        <h6>{{ w_income.week }}</h6>
+                                        <h3>{{ w_income.total_amount }}</h3>
+                                        {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-md-4">
+                                <a class="text-decoration-none text-dark" href="{% url 'view_all_grocery' %}">
+                                    <div class="card my-card shadow text-center p-3 text-secondary">
+                                        <h4><i class="fa-solid fa-calendar-days"></i></h4>
+                                        {% for m_income in monthly_income %}
+                                        {% if forloop.last or m_income.count == 1 %}
+                                        <h6>{{ m_income.month }}</h6>
+                                        <h3>{{ m_income.total_amount }}</h3>
+                                        {% endif%}
+                                        {% endfor %}
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--End Topside-->
+
+    <!--Topside-->
+    <div class="container">
+        <div class="row mt-4">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header bg-info text-white">
+                        INFO
+                    </div>
+                    <div class="card-body">
+                        <marquee behavior="" direction="">
+                            <h3 class="my-4">Monthly Expenses</h3>
+                        </marquee>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header bg-info text-white">
+                        EXPENSE STATS
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <a class="text-decoration-none text-dark" href="{% url 'view_all_grocery' %}">
+                                    <div class="card my-card shadow text-center p-3 text-secondary">
+                                        <h4><i class="fa-solid fa-boxes-stacked"></i> <br>stock</h4>
+                                        {% for stock_exp in monthly_stock_expenses %}
+                                        {% if forloop.last or stock_expenses.count == 1 %}
+                                        <h6>{{ stock_exp.day }}</h6>
+                                        <h3>{{ stock_exp.total_expense }}</h3>
+                                        {% endif%}
+                                        {% endfor %}
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-md-4">
+                                <a class="text-decoration-none text-dark" href="{% url 'view_all_grocery' %}">
+                                    <div class="card my-card shadow text-center p-3 text-secondary">
+                                        <h4><i class="fa-brands fa-cc-amazon-pay"></i> <br>salary</h4>
+                                        {% for m_salary in monthly_salary %}
+                                        {% if forloop.last or m_salary.count == 1 %}
+                                        <h6>{{ m_salary.day }}</h6>
+                                        <h3>{{ m_salary.total_expense }}</h3>
+                                        {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-md-4">
+                                <a class="text-decoration-none text-dark" href="{% url 'view_all_grocery' %}">
+                                    <div class="card my-card shadow text-center p-3 text-secondary">
+                                        <h4><i class="fa-solid fa-money-bill-wave"></i> <br>misc.</h4>
+                                        {% for misc_exp in monthly_misc_expenses %}
+                                        {% if forloop.last or misc_expenses.count == 1 %}
+                                        <h6>{{ misc_exp.day }}</h6>
+                                        <h3>{{ misc_exp.total_expense }}</h3>
+                                        {% endif%}
+                                        {% endfor %}
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--End Topside-->
+
+    <!--Topside-->
+    <div class="container">
+        <div class="row mt-4">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header bg-info text-white">
+                        INFO
+                    </div>
+                    <div class="card-body">
+                        <marquee behavior="" direction="">
+                            <h3 class="my-4"> Monthly Income</h3>
+                        </marquee>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header bg-info text-white">
+                        GROSS & NET STATS
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <a class="text-decoration-none text-dark" href="{% url 'view_all_grocery' %}">
+                                    <div class="card my-card shadow text-center p-3 text-primary">
+                                        <h4><i class="fa-solid fa-money-bill-trend-up"></i><br>Gross Income</h4>
+                                        <h3>{{ total_income }} </h3>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-md-4">
+                                <a class="text-decoration-none text-dark" href="{% url 'view_all_grocery' %}">
+                                    <div class="card my-card shadow text-center p-3 text-warning">
+                                        <h4><i class="fa-solid fa-money-bill-transfer"></i> <br> Expenses</h4>
+                                        <h3>{{ sum_expenses }}</h3>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-md-4">
+                                <a class="text-decoration-none text-dark" href="{% url 'view_all_grocery' %}">
+                                    <div class="card my-card shadow text-center p-3 text-success">
+                                        <h4><i class="fa-solid fa-sack-dollar"></i><br>Net Income</h4>
+                                        <h3>{{ net_value }}</h3>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--End Topside-->
+
+        <button class="btn btn-white w-100 mt-4 pt-2 mb-4 no-pointer"></button>
+
+
+    <a href="{% url 'view_all_grocery' %}">
+        <button class="btn btn-primary mt-1">View All...</button>
+    </a>
+
+</div> <!-- END // container -->
+
+{% endblock content %}
+
+<!-- Car wash Block -->
+{% block carwash %} {% endblock %}
+
+<!-- Restaurant Block -->
+{% block restaurant %} {% endblock %}
+
+<!-- Grocery Block -->
+{% block grocery %} {% endblock %}
+
+
+

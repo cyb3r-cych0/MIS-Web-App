@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+<!-- Block Title -->
+<title>{% block title %} Restaurant {% endblock %}</title>
+
+<!-- Navbar links control -->
+{% block links %}{% endblock %}
+
+<!-- Logout Button -->
+{% block nav-btn %}
+    <a class="btn btn-custom" id="btn-nav-view" href="{% url 'restaurant' %}">Back</a>
+    <a class="btn btn-custom" id="btn-nav-back" href="{% url 'backend' %}" >Control Panel</a>
+    <a class="btn btn-custom" id="btn-nav" data-bs-toggle="modal" data-bs-target="#logout">Logout</a>
+{% endblock %}
+
+<!-- Block TopBar -->
+{% block topbar %}
+<div class="top-bar mt-4 pt-5">
+        <div class="container mt-5">
+            <div class="row align-items-center">
+                <div class="col-lg-4 col-md-12">
+                    <div class="logo">
+                        <img src="{% static 'img/icon.png' %}" alt="Logo">
+                        <h1><span>M</span>I<span>S</span></h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+<!-- Block Footer -->
+{% block footer %} style="color: #ff7f7f;" {% endblock %}
+
+<!-- Block NavBar Content -->
+{% block nav-content %}
+    <i class="fa-solid fa-unlock-keyhole mb-3" style="color: #fff; font-size: 20px"></i>   &nbsp;&nbsp; <h2 style="color: #fff; font-size: 20px">Administration</h2>
+{% endblock %}
+
+<!-- Page Content -->
+{% block content %}
+    <br>
+    <div class="container mt-2 mb-5" style="width: 95%; font-size: 14px">
+        <!-- Add Form -->
+        <button class="btn btn-warning w-100 mt-3 mb-1 no-pointer">
+            <i class="fas fa-utensils"></i>&nbsp;&nbsp;ADD RESTAURANT DETAILS
+        </button>
+        {% for message in messages %}
+            {% if message.tags == 'error' %}
+                <div class="text-center alert alert-primary alert-dismissible fade show" role="alert">{{ message }}
+                    <a href="{% url 'restaurant' %}" type="button" class="btn btn-close" data-bs-dismiss="alert" aria-label="Close"></a>
+                </div>
+            {% endif %}
+        {% endfor %}
+
+        <form method="POST" action="" class="card p-3 mt-2" autocomplete="off">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-6">
+                    {{ form.rest_sales_date|as_crispy_field }}
+                </div>
+                <div class="col-6">
+                    {{ form.rest_daily_sales|as_crispy_field }}
+                </div>
+            </div>
+            <button type="submit" class="btn btn-outline-primary mt-3" style="width: 90px;">Submit</button>
+        </form>
+
+        <!--Section 2 (next class)-->
+
+    </div> <!-- END // container -->
+    <div class="container mb-5 mt-4">
+        <button class="btn w-100 mt-3 mb-5 no-pointer"></button>
+        <button class="btn w-100 mt-3 mb-4 no-pointer"></button>
+    </div>
+<!-- Bootstrap 5 -->
+<!-- Jquery -->
+<!-- Jquery Mask CDN -->
+{% endblock content %}
+
+<!-- Car wash Block -->
+{% block carwash %} {% endblock %}
+
+<!-- Restaurant Block -->
+{% block restaurant %} {% endblock %}
+
+<!-- Grocery Block -->
+{% block grocery %} {% endblock %}
+

@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% load static %}
+
+<!-- Navbar links control -->
+{% block links %}{% endblock %}
+
+<!-- Block NavBar Content -->
+{% block nav-content %}
+    <i class="fa-solid fa-unlock-keyhole ml-2 mb-3" style="color: #fff; font-size: 20px"></i>   &nbsp;&nbsp; <h2 style="color: #fff; font-size: 20px">Administration</h2>
+{% endblock %}
+
+<!-- Block Title -->
+<title>{% block title %} Car Details {% endblock %}</title>
+
+<!-- Logout Button -->
+{% block nav-btn %}
+    <a class="btn btn-custom" id="btn-nav-view" href="{% url 'view_more' %}">Back</a>
+    <a class="btn btn-custom" id="btn-nav-back" href="{% url 'backend' %}" >Control Panel</a>
+    <a class="btn btn-custom" id="btn-nav" data-bs-toggle="modal" data-bs-target="#logout">Logout</a>
+{% endblock %}
+
+{% block topbar %}
+<div class="top-bar mt-4 pt-5">
+        <div class="container mt-5">
+            <div class="row align-items-center">
+                <div class="col-lg-4 col-md-12">
+                    <div class="logo">
+                        <img src="{% static 'img/icon.ico' %}" alt="Logo">
+                        <h1><span>M</span>I<span>S</span></h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+<!-- Block Footer -->
+{% block footer %} style="color: #ff7f7f;" {% endblock %}
+
+<!-- Page Content -->
+{% block content %}
+<br>
+    <div class="container mt-1 mb-5 pb-2">
+        <!-- links|cards -->
+        <button class="btn btn-warning w-100 mt-3 mb-2 no-pointer">
+            <i class="fa-solid fa-circle-info"></i>&nbsp;&nbsp;CAR DETAILS
+        </button>
+        <div id="pt" class="col-6">
+            <div class="card p-3 mt-3 mb-4">
+                <div class="row" >
+                  {% for d in data %}
+                    <h3>&nbsp;&nbsp;{{ d.car_number|capfirst }}</h3>
+                    <h4>&nbsp;&nbsp;{{ d.car_model }}<small class="text-body-secondary fw-light" style="font-size: 17px">&nbsp;&nbsp;&nbsp;{{ car.car_description }}</small></h4>
+                    <div class="container m-3">
+                        {% if d.car_notes %}
+                        <p>Notes: {{ d.car_notes }}</p>
+                        {% endif %}
+<!--                        {% if d.service_type %}-->
+<!--                            <p>Service Type: {{ d.service_type }}</p>-->
+<!--                        {% endif %}-->
+
+                        {% if d.servicing %}
+                            <p>Additional Services: {{ d.servicing }}</p>
+                        {% endif %}
+
+                        <p>Submitted By: {{ d.car_owner_name }}</p>
+                        <p>Phone No.:&nbsp;{{ d.car_owner_number }}</p>
+                        <p>Submitted On: {{ d.submission_date|date:"M d Y" }}</p>
+                        <p>Service Cost: {{ d.servicing_cost }}</p>
+                    </div>
+                  {% endfor %}
+                </div>
+            </div>
+        </div>
+            <a href="{% url 'car_wash' %}">
+                <button onclick="myfun('pt')" type="button" class="btn btn-outline-success m-1 p-2">Print</button>
+            </a>
+        </div>
+
+</div> <!-- END // container -->
+
+<script type="text/javascript">
+    function myfun(pa){
+    var bk = document.body.innerHTML;
+    var dv = document.getElementById(pa).innerHTML;
+        document.body.innerHTML = dv;
+        window.print();
+    }
+</script>
+
+{% endblock content %}
+
+<!-- Car wash Block -->
+{% block carwash %} {% endblock %}
+
+<!-- Restaurant Block -->
+{% block restaurant %} {% endblock %}
+
+<!-- Grocery Block -->
+{% block grocery %} {% endblock %}
