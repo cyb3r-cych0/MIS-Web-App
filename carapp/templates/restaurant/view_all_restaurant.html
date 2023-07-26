@@ -41,6 +41,13 @@
 <!-- Page Content -->
 {% block content %}
 
+{% if is_superuser %}
+    <div class="container mt-5">
+        <!-- Content accessible only by superusers -->
+        <h1>Hello Superuser!</h1>
+        <p>This content is only visible to superusers.</p>
+    </div>
+
 <br>
 <div class="container mb-5" style="width: 95%; font-size: 14px">
     <!-- Display Restaurant Report -->
@@ -136,6 +143,19 @@
         <button class="btn btn-primary mt-1">Download CSV</button>
     </a>
 </div>
+
+{% else %}
+    <div class="container mt-5 mb-5">
+        <!-- Content accessible by regular users -->
+        <h1>Hello Regular User!</h1>
+        <p>Content Restricted</p>
+
+        <a href="{% url 'restaurant' %}">
+            <button class="btn btn-primary mb-1 ml-5">Go Back</button>
+        </a>
+    </div>
+{% endif %}
+
 {% endblock content %}
 
 <!-- Car wash Block -->

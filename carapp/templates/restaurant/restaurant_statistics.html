@@ -40,6 +40,13 @@
 <!-- Page Content -->
 {% block content %}
 
+{% if is_superuser %}
+    <div class="container mt-5">
+        <!-- Content accessible only by superusers -->
+        <h1>Hello Superuser!</h1>
+        <p>This content is only visible to superusers.</p>
+    </div>
+
 <!-- Display Car All Cars  -->
 <div class="container mb-5" style="width: 95%; font-size: 14px">
     <button class="btn btn-outline w-100 mt-1 pt-1 mb-1 no-pointer">
@@ -235,6 +242,18 @@
     </a>
 
 </div> <!-- END // container -->
+
+{% else %}
+    <div class="container mt-5 mb-5">
+        <!-- Content accessible by regular users -->
+        <h1>Hello Regular User!</h1>
+        <p>Content Restricted</p>
+
+        <a href="{% url 'restaurant' %}">
+            <button class="btn btn-primary mb-1 ml-5">Go Back</button>
+        </a>
+    </div>
+{% endif %}
 
 {% endblock content %}
 

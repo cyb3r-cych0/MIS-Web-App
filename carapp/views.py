@@ -1,3 +1,4 @@
+from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required  # Login required to access privates pages
 from django.views.decorators.cache import cache_control  # prevent back button(destroy last section)
@@ -69,7 +70,7 @@ def car_wash(request):
         'cars_all': cars_all,
         'year': now.year,
         'month': now.strftime('%B'),
-        'net_value': net_value,
+        # 'net_value': net_value,
         'sum_expenses': sum_expenses,
         'rent_expenses': rent_expenses
     }
@@ -80,6 +81,7 @@ def car_wash(request):
 @login_required(login_url='login')
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def carwash_statistics(request):
+    is_superuser = request.user.is_superuser
     now = datetime.datetime.now()
     # get gross income
     all_cars = Car.objects.all()
@@ -139,6 +141,7 @@ def carwash_statistics(request):
         'monthly_commission': monthly_commission,
         'monthly_electricity': monthly_electricity,
         'monthly_misc_expenses': monthly_misc_expenses,
+        'is_superuser': is_superuser,
         # 'weekly_commission': weekly_commission,
         # 'weekly_electricity': weekly_electricity,
         # 'weekly_misc_expenses': weekly_misc_expenses,
@@ -154,6 +157,7 @@ def carwash_statistics(request):
 @login_required(login_url='login')
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def restaurant_statistics(request):
+    is_superuser = request.user.is_superuser
     # get gross income
     all_restaurant = Restaurant.objects.all()
     total_income = sum(all_restaurant.values_list('rest_daily_sales', flat=True))
@@ -174,14 +178,17 @@ def restaurant_statistics(request):
     daily_income = Restaurant.objects.annotate(day=TruncDay('rest_sales_date')).values('day').annotate(
         total_amount=Sum('rest_daily_sales'))
     # get latest monthly, weekly & daily expense
-    monthly_salary = RestaurantExpense.objects.annotate(month=TruncMonth('r_expenditure_date')).values('month').annotate(
+    monthly_salary = RestaurantExpense.objects.annotate(month=TruncMonth('r_expenditure_date')).values(
+        'month').annotate(
         total_expense=Sum('r_salary_expenses'))
-    monthly_misc_expenses = RestaurantExpense.objects.annotate(month=TruncMonth('r_expenditure_date')).values('month').annotate(
+    monthly_misc_expenses = RestaurantExpense.objects.annotate(month=TruncMonth('r_expenditure_date')).values(
+        'month').annotate(
         total_expense=Sum('r_misc_expenses'))
 
     weekly_salary = RestaurantExpense.objects.annotate(week=TruncWeek('r_expenditure_date')).values('week').annotate(
         total_expense=Sum('r_salary_expenses'))
-    weekly_misc_expenses = RestaurantExpense.objects.annotate(week=TruncWeek('r_expenditure_date')).values('week').annotate(
+    weekly_misc_expenses = RestaurantExpense.objects.annotate(week=TruncWeek('r_expenditure_date')).values(
+        'week').annotate(
         total_expense=Sum('r_misc_expenses'))
 
     daily_salary = RestaurantExpense.objects.annotate(day=TruncDay('r_expenditure_date')).values('day').annotate(
@@ -198,6 +205,7 @@ def restaurant_statistics(request):
         'daily_income': daily_income,
         'monthly_salary': monthly_salary,
         'monthly_misc_expenses': monthly_misc_expenses,
+        'is_superuser': is_superuser
         # 'weekly_commission': weekly_commission,
         # 'weekly_electricity': weekly_electricity,
         # 'weekly_misc_expenses': weekly_misc_expenses,
@@ -212,6 +220,7 @@ def restaurant_statistics(request):
 @login_required(login_url='login')
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def grocery_statistics(request):
+    is_superuser = request.user.is_superuser
     # get gross income
     all_grocery = Grocery.objects.all()
     total_income = sum(all_grocery.values_list('groc_daily_sales', flat=True))
@@ -262,6 +271,7 @@ def grocery_statistics(request):
         'monthly_salary': monthly_salary,
         'monthly_misc_expenses': monthly_misc_expenses,
         'monthly_stock_expenses': monthly_stock_expenses,
+        'is_superuser': is_superuser
         # 'weekly_commission': weekly_commission,
         # 'weekly_electricity': weekly_electricity,
         # 'weekly_misc_expenses': weekly_misc_expenses,
@@ -276,7 +286,7 @@ def grocery_statistics(request):
 @login_required(login_url='login')
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def view_more(request):
-    cars = Car.objects.all().order_by('-id')[:10]
+    cars = Car.objects.all().order_by('-id')[:1]
     context = {
         'cars': cars,
     }
@@ -287,7 +297,7 @@ def view_more(request):
 @login_required(login_url='login')
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def view_more_expense(request):
-    exps = Expenses.objects.all().order_by('-id')[:10]
+    exps = Expenses.objects.all().order_by('-id')[:1]
     context = {
         'exps': exps
     }
@@ -298,7 +308,7 @@ def view_more_expense(request):
 @login_required(login_url='login')
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def view_more_rest_expense(request):
-    rest_exp = RestaurantExpense.objects.all().order_by('-id')[:10]
+    rest_exp = RestaurantExpense.objects.all().order_by('-id')[:1]
     context = {
         'rest_exp': rest_exp
     }
@@ -309,7 +319,7 @@ def view_more_rest_expense(request):
 @login_required(login_url='login')
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def view_more_groc_expense(request):
-    groc_exp = GroceryExpense.objects.all().order_by('-id')[:10]
+    groc_exp = GroceryExpense.objects.all().order_by('-id')[:1]
     context = {
         'groc_exp': groc_exp
     }
@@ -320,6 +330,7 @@ def view_more_groc_expense(request):
 @login_required(login_url='login')
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def view_all_cars(request):
+    is_superuser = request.user.is_superuser
     cars = Car.objects.all()
     cars_number = cars.count()
     # get gross income
@@ -339,7 +350,8 @@ def view_all_cars(request):
         'cars_number': cars_number,
         'sum_expenses': sum_expenses,
         'net_value': net_value,
-        'total_income': total_income
+        'total_income': total_income,
+        'is_superuser': is_superuser
     }
     return render(request, 'carwash/view_all_cars.html', context)
 
@@ -348,10 +360,13 @@ def view_all_cars(request):
 @login_required(login_url='login')
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def view_more_restaurant(request):
-    rest = Restaurant.objects.all().order_by('-id')[:10]
-    monthly_income = Restaurant.objects.annotate(month=TruncMonth('rest_sales_date')).values('month').annotate(total_amount=Sum('rest_daily_sales'))
-    weekly_income = Restaurant.objects.annotate(week=TruncWeek('rest_sales_date')).values('week').annotate(total_amount=Sum('rest_daily_sales'))
-    daily_income = Restaurant.objects.annotate(day=TruncDay('rest_sales_date')).values('day').annotate(total_amount=Sum('rest_daily_sales'))
+    rest = Restaurant.objects.all().order_by('-id')[:1]
+    monthly_income = Restaurant.objects.annotate(month=TruncMonth('rest_sales_date')).values('month').annotate(
+        total_amount=Sum('rest_daily_sales'))
+    weekly_income = Restaurant.objects.annotate(week=TruncWeek('rest_sales_date')).values('week').annotate(
+        total_amount=Sum('rest_daily_sales'))
+    daily_income = Restaurant.objects.annotate(day=TruncDay('rest_sales_date')).values('day').annotate(
+        total_amount=Sum('rest_daily_sales'))
     context = {
         'rest': rest,
         'monthly_income': monthly_income,
@@ -364,6 +379,7 @@ def view_more_restaurant(request):
 @login_required(login_url='login')
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def view_all_restaurant(request):
+    is_superuser = request.user.is_superuser
     rest = Restaurant.objects.all()
     # get gross income
     total_income = sum(rest.values_list('rest_daily_sales', flat=True))
@@ -378,7 +394,8 @@ def view_all_restaurant(request):
         'rest': rest,
         'total_income': total_income,
         'sum_expenses': sum_expenses,
-        'net_value': net_value
+        'net_value': net_value,
+        'is_superuser': is_superuser
     }
     return render(request, 'restaurant/view_all_restaurant.html', context)
 
@@ -387,7 +404,7 @@ def view_all_restaurant(request):
 @login_required(login_url='login')
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def view_more_grocery(request):
-    groc = Grocery.objects.all().order_by('-id')[:10]
+    groc = Grocery.objects.all().order_by('-id')[:1]
     context = {
         'groc': groc,
     }
@@ -397,6 +414,7 @@ def view_more_grocery(request):
 @login_required(login_url='login')
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def view_all_grocery(request):
+    is_superuser = request.user.is_superuser
     groc = Grocery.objects.all()
     # get gross income
     total_income = sum(groc.values_list('groc_daily_sales', flat=True))
@@ -412,7 +430,8 @@ def view_all_grocery(request):
         'groc': groc,
         'total_income': total_income,
         'sum_expenses': sum_expenses,
-        'net_value': net_value
+        'net_value': net_value,
+        'is_superuser': is_superuser
     }
     return render(request, 'grocery/view_all_grocery.html', context)
 
@@ -491,102 +510,126 @@ def grocery_detail(request, id):
 @login_required(login_url='login')
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def update(request, id):
-    listing = Car.objects.get(id=id)
-    form = CarForm(instance=listing)
-    if request.method == 'POST':
-        form = CarForm(request.POST, instance=listing)
-        if form.is_valid():
-            messages.success(request, 'SUCCESS! Car Updated Successfully.')
-            form.save()
-            return redirect('/car_wash')
-        else:
-            messages.error(request, 'FAILED! Something Went Wrong.')
-            context = {
-                'form': form
-            }
-            return render(request, 'carwash/update.html', context)
-    context = {
-        'form': form
-    }
-    return render(request, 'carwash/update.html', context)
+    is_superuser = request.user.is_superuser
+    if is_superuser:
+        listing = Car.objects.get(id=id)
+        form = CarForm(instance=listing)
+        if request.method == 'POST':
+            form = CarForm(request.POST, instance=listing)
+            if form.is_valid():
+                messages.success(request, 'SUCCESS! Car Updated Successfully.')
+                form.save()
+                return redirect('/car_wash')
+            else:
+                messages.error(request, 'FAILED! Something Went Wrong.')
+                context = {
+                    'form': form
+                }
+                return render(request, 'carwash/update.html', context)
+        context = {
+            'form': form
+        }
+        return render(request, 'carwash/update.html', context)
+    else:
+        return redirect('/car_wash')
 
 
 # update restaurant data
 @login_required(login_url='login')
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def update_rest_data(request, id):
-    listing = Restaurant.objects.get(id=id)
-    form = RestaurantForm(instance=listing)
-    if request.method == 'POST':
-        form = RestaurantForm(request.POST, instance=listing)
-        if form.is_valid():
-            messages.success(request, 'SUCCESS! Restaurant Updated Successfully.')
-            form.save()
-            return redirect('/restaurant')
-        else:
-            messages.error(request, 'FAILED! Something Went Wrong.')
-            context = {
-                'form': form
-            }
-            return render(request, 'restaurant/update_rest_data.html', context)
-    context = {
-        'form': form
-    }
-    return render(request, 'restaurant/update_rest_data.html', context)
+    is_superuser = request.user.is_superuser
+    if is_superuser:
+        listing = Restaurant.objects.get(id=id)
+        form = RestaurantForm(instance=listing)
+        if request.method == 'POST':
+            form = RestaurantForm(request.POST, instance=listing)
+            if form.is_valid():
+                messages.success(request, 'SUCCESS! Restaurant Updated Successfully.')
+                form.save()
+                return redirect('/restaurant')
+            else:
+                messages.error(request, 'FAILED! Something Went Wrong.')
+                context = {
+                    'form': form
+                }
+                return render(request, 'restaurant/update_rest_data.html', context)
+        context = {
+            'form': form
+        }
+        return render(request, 'restaurant/update_rest_data.html', context)
+    else:
+        return redirect('/restaurant')
 
 
 # update grocery data
 @login_required(login_url='login')
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def update_groc_data(request, id):
-    listing = Grocery.objects.get(id=id)
-    form = GroceryForm(instance=listing)
-    if request.method == 'POST':
-        form = GroceryForm(request.POST, instance=listing)
-        if form.is_valid():
-            messages.success(request, 'SUCCESS! Grocery Updated Successfully.')
-            form.save()
-            return redirect('/grocery')
-        else:
-            messages.error(request, 'FAILED! Something Went Wrong.')
-            context = {
-                'form': form
-            }
-            return render(request, 'grocery/update_groc_data.html', context)
-    context = {
-        'form': form
-    }
-    return render(request, 'grocery/update_groc_data.html', context)
+    is_superuser = request.user.is_superuser
+    if is_superuser:
+        listing = Grocery.objects.get(id=id)
+        form = GroceryForm(instance=listing)
+        if request.method == 'POST':
+            form = GroceryForm(request.POST, instance=listing)
+            if form.is_valid():
+                messages.success(request, 'SUCCESS! Grocery Updated Successfully.')
+                form.save()
+                return redirect('/grocery')
+            else:
+                messages.error(request, 'FAILED! Something Went Wrong.')
+                context = {
+                    'form': form
+                }
+                return render(request, 'grocery/update_groc_data.html', context)
+        context = {
+            'form': form
+        }
+        return render(request, 'grocery/update_groc_data.html', context)
+    else:
+        return redirect('/grocery')
 
 
 # delete car data (backend)
 @login_required(login_url='login')
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def delete(request, id):
-    listing = Car.objects.get(id=id)
-    listing.delete()
-    messages.success(request, 'Car Data Deleted Successfully!')
-    return redirect('/car_wash')
+    is_superuser = request.user.is_superuser
+    if is_superuser:
+        listing = Car.objects.get(id=id)
+        listing.delete()
+        messages.success(request, 'Car Data Deleted Successfully!')
+        return redirect('/car_wash')
+    else:
+        return redirect('/car_wash')
 
 
 # delete restaurant data
 @login_required(login_url='login')
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def delete_rest_data(request, id):
-    listing = Restaurant.objects.get(id=id)
-    listing.delete()
-    messages.success(request, 'Restaurant Data Deleted Successfully')
-    return redirect('/restaurant')
+    is_superuser = request.user.is_superuser
+    if is_superuser:
+        listing = Restaurant.objects.get(id=id)
+        listing.delete()
+        messages.success(request, 'Restaurant Data Deleted Successfully')
+        return redirect('/restaurant')
+    else:
+        return redirect('/restaurant')
 
 
 # delete grocery data
 @login_required(login_url='login')
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def delete_groc_data(request, id):
-    listing = Grocery.objects.get(id=id)
-    listing.delete()
-    messages.success(request, 'Grocery Data Deleted Successfully')
-    return redirect('/grocery')
+    is_superuser = request.user.is_superuser
+    if is_superuser:
+        listing = Grocery.objects.get(id=id)
+        listing.delete()
+        messages.success(request, 'Grocery Data Deleted Successfully')
+        return redirect('/grocery')
+    else:
+        return redirect('/grocery')
 
 
 # add car data (backend)
@@ -825,19 +868,22 @@ def export_csv_grocery(request):
 @login_required(login_url='login')
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def report(request):
+    is_superuser = request.user.is_superuser
     if request.method == 'POST':
         from_date = request.POST.get('from_date')
         to_date = request.POST.get('to_date')
         search_result = Car.objects.raw(
             'select id, car_model, car_number, car_description, car_notes, car_owner_name, car_owner_number, service_type, servicing, submission_date, servicing_cost from carapp_car where submission_date between "' + from_date + '" and "' + to_date + '"')
         context = {
-            'carz': search_result
+            'carz': search_result,
+            'is_superuser': is_superuser
         }
         return render(request, 'carwash/view_all_cars.html', context)
     else:
         carz = Car.objects.all()
         context = {
-            'carz': carz
+            'carz': carz,
+            'is_superuser': is_superuser
         }
     return render(request, 'carwash/view_all_cars.html', context)
 
@@ -846,19 +892,22 @@ def report(request):
 @login_required(login_url='login')
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def restaurant_report(request):
+    is_superuser = request.user.is_superuser
     if request.method == 'POST':
         from_date = request.POST.get('from_date')
         to_date = request.POST.get('to_date')
         search_result = Restaurant.objects.raw(
             'select id, rest_sales_date, rest_daily_sales from carapp_restaurant where rest_sales_date between "' + from_date + '" and "' + to_date + '"')
         context = {
-            'rest_data': search_result
+            'rest_data': search_result,
+            'is_superuser': is_superuser
         }
         return render(request, 'restaurant/view_all_restaurant.html', context)
     else:
         rest_data = Restaurant.objects.all()
         context = {
-            'rest_data': rest_data
+            'rest_data': rest_data,
+            'is_superuser': is_superuser
         }
         return render(request, 'restaurant/view_all_restaurant.html', context)
 
@@ -867,19 +916,22 @@ def restaurant_report(request):
 @login_required(login_url='login')
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def grocery_report(request):
+    is_superuser = request.user.is_superuser
     if request.method == 'POST':
         from_date = request.POST.get('from_date')
         to_date = request.POST.get('to_date')
         search_result = Grocery.objects.raw(
             'select id, groc_sales_date, groc_daily_sales from carapp_grocery where groc_sales_date between "' + from_date + '" and "' + to_date + '"')
         context = {
-            'groc_data': search_result
+            'groc_data': search_result,
+            'is_superuser': is_superuser
         }
         return render(request, 'grocery/grocery_report.html', context)
     else:
         groc_data = Grocery.objects.all()
         context = {
-            'groc_data': groc_data
+            'groc_data': groc_data,
+            'is_superuser': is_superuser
         }
         return render(request, 'grocery/grocery_report.html', context)
 
@@ -895,6 +947,7 @@ def service_center(request):
 @login_required(login_url='login')
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def all_reports(request):
+    is_superuser = request.user.is_superuser
     # restaurant report
     rest_all = Restaurant.objects.all()
     rest_sales_total = sum(rest_all.values_list('rest_daily_sales', flat=True))
@@ -951,7 +1004,8 @@ def all_reports(request):
         'net_sales': net_sales,
         'net_income_total': net_income_total,
         'expenses_total': expenses_total,
-        'gross_income_total': gross_income_total
+        'gross_income_total': gross_income_total,
+        'is_superuser': is_superuser
     }
     return render(request, 'backend/all_reports.html', context)
 
@@ -976,7 +1030,7 @@ def restaurant(request):
         'rest_data': rest_data,
         'year': now.year,
         'month': now.strftime('%B'),
-        'total_income': total_income
+        # 'total_income': total_income
     }
     return render(request, 'backend/restaurant.html', context)
 
@@ -1003,6 +1057,6 @@ def grocery(request):
         'groc_data': groc_data,
         'year': now.year,
         'month': now.strftime('%B'),
-        'total_income': total_income
+        # 'total_income': total_income
     }
     return render(request, 'backend/grocery.html', context)

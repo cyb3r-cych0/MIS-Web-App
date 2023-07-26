@@ -37,6 +37,13 @@
 
 {% block content %}
 
+{% if is_superuser %}
+    <div class="container mt-5">
+        <!-- Content accessible only by superusers -->
+        <h1>Hello Superuser!</h1>
+        <p>This content is only visible to superusers.</p>
+    </div>
+
 <!-- Page Header Start -->
 <div class="container mb-5" style="width: 95%; font-size: 14px">
     <!-- links|cards -->
@@ -148,6 +155,18 @@
     </a>
 
 </div> <!-- END // container -->
+
+{% else %}
+    <div class="container mt-5 mb-5">
+        <!-- Content accessible by regular users -->
+        <h1>Hello Regular User!</h1>
+        <p>Content Restricted</p>
+
+        <a href="{% url 'car_wash' %}">
+            <button class="btn btn-primary mb-1 ml-5">Go Back</button>
+        </a>
+    </div>
+{% endif %}
 
 <!-- Page Header End -->
 {% endblock %}

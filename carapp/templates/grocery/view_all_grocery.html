@@ -41,100 +41,120 @@
 <!-- Page Content -->
 {% block content %}
 
-<br>
-<div class="container mb-5" style="width: 95%; font-size: 14px">
-    <!-- Display Restaurant Report -->
-    <button class="btn btn-warning w-100 mt-4 mb-2 no-pointer">
-        <i class="fa-solid fa-file-lines"></i>&nbsp;&nbsp; GROCERY REPORT
-    </button>
+{% if is_superuser %}
+    <div class="container mt-5">
+        <!-- Content accessible only by superusers -->
+        <h1>Hello Superuser!</h1>
+        <p>This content is only visible to superusers.</p>
+    </div>
 
-    <!--Topside-->
-    <div class="container">
-        <div class="row mt-4">
-            <div class="col-md-4">
-                <div class="card border-secondary">
-                    <div class="card-header bg-info text-black bg-white border-secondary">
-                        INFO DISPLAY
-                    </div>
-                    <div class="card-body">
-                        <marquee behavior="" direction="">
-                            <h3 class="my-4 fg-info text-secondary">Total Sales Information</h3>
-                        </marquee>
+    <br>
+    <div class="container mb-5" style="width: 95%; font-size: 14px">
+        <!-- Display Restaurant Report -->
+        <button class="btn btn-warning w-100 mt-4 mb-2 no-pointer">
+            <i class="fa-solid fa-file-lines"></i>&nbsp;&nbsp; GROCERY REPORT
+        </button>
+
+        <!--Topside-->
+        <div class="container">
+            <div class="row mt-4">
+                <div class="col-md-4">
+                    <div class="card border-secondary">
+                        <div class="card-header bg-info text-black bg-white border-secondary">
+                            INFO DISPLAY
+                        </div>
+                        <div class="card-body">
+                            <marquee behavior="" direction="">
+                                <h3 class="my-4 fg-info text-secondary">Total Sales Information</h3>
+                            </marquee>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-8">
-                <div class="card border-secondary">
-                    <div class="card-header bg-info text-black bg-white border-secondary">
-                        INCOME STATISTICS
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <a class="text-decoration-none text-dark" href="">
-                                    <div class="card my-card shadow text-center p-3 bg-primary">
-                                        <h4>Gross Sales <br> <i class="fa-solid fa-money-bill-trend-up"></i></h4>
-                                        <h3>{{ total_income }}</h3>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="col-md-4">
-                                <a class="text-decoration-none text-dark" href="">
-                                    <div class="card my-card shadow text-center p-3 bg-warning">
-                                        <h4>Expenses <br> <i class="fa-solid fa-money-bill-transfer bg-warning"></i></h4>
-                                        <h3>{{ sum_expenses }}</h3>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="col-md-4">
-                                <a class="text-decoration-none text-dark" href="">
-                                    <div class="card my-card shadow text-center p-3 bg-success">
-                                        <h4>Net Sales <br> <i class="fa-solid fa-sack-dollar"></i></h4>
-                                        <h3>{{ net_value }}</h3>
-                                    </div>
-                                </a>
+                <div class="col-md-8">
+                    <div class="card border-secondary">
+                        <div class="card-header bg-info text-black bg-white border-secondary">
+                            INCOME STATISTICS
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <a class="text-decoration-none text-dark" href="">
+                                        <div class="card my-card shadow text-center p-3 bg-primary">
+                                            <h4>Gross Sales <br> <i class="fa-solid fa-money-bill-trend-up"></i></h4>
+                                            <h3>{{ total_income }}</h3>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="col-md-4">
+                                    <a class="text-decoration-none text-dark" href="">
+                                        <div class="card my-card shadow text-center p-3 bg-warning">
+                                            <h4>Expenses <br> <i class="fa-solid fa-money-bill-transfer bg-warning"></i></h4>
+                                            <h3>{{ sum_expenses }}</h3>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="col-md-4">
+                                    <a class="text-decoration-none text-dark" href="">
+                                        <div class="card my-card shadow text-center p-3 bg-success">
+                                            <h4>Net Sales <br> <i class="fa-solid fa-sack-dollar"></i></h4>
+                                            <h3>{{ net_value }}</h3>
+                                        </div>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        <!--End Topside-->
+
+        <button class="btn btn-secondary w-100 mt-5 pt-2 mb-2 no-pointer">
+            <i class="fa-solid fa-file-lines"></i>&nbsp;&nbsp; DETAILED GROCERY REPORT
+        </button>
+
+        <hr>
+        <form method="POST">
+            {% csrf_token %}
+            From: <input type="date" name="from_date">
+            To: <input type="date" name="to_date">
+            <input type="submit" value="Search">
+
+        <hr>
+            <table border="2">
+                <tr>
+                    <th>ID</th>
+                    <th>Sales Date</th>
+                    <th>Total Sales</th>
+                </tr>
+                {% for g_data in groc %}
+               <tr>
+                   <td>{{ g_data.id }}</td>
+                   <td>{{ g_data.groc_sales_date }}</td>
+                   <td>{{ g_data.groc_daily_sales }}</td>
+               </tr>
+                {% endfor %}
+            </table>
+        </form>
+
+        <a href="{% url 'export_csv_grocery' %}">
+            <button class="btn btn-primary mt-1">Download CSV</button>
+        </a>
+
+    </div > <!-- END // container -->
+
+{% else %}
+    <div class="container mt-5 mb-5">
+        <!-- Content accessible by regular users -->
+        <h1>Hello Regular User!</h1>
+        <p>Content Restricted</p>
+
+        <a href="{% url 'grocery' %}">
+            <button class="btn btn-primary mb-1 ml-5">Go Back</button>
+        </a>
     </div>
-    <!--End Topside-->
+{% endif %}
 
-    <button class="btn btn-secondary w-100 mt-5 pt-2 mb-2 no-pointer">
-        <i class="fa-solid fa-file-lines"></i>&nbsp;&nbsp; DETAILED GROCERY REPORT
-    </button>
-
-    <hr>
-    <form method="POST">
-        {% csrf_token %}
-        From: <input type="date" name="from_date">
-        To: <input type="date" name="to_date">
-        <input type="submit" value="Search">
-
-    <hr>
-        <table border="2">
-            <tr>
-                <th>ID</th>
-                <th>Sales Date</th>
-                <th>Total Sales</th>
-            </tr>
-            {% for g_data in groc %}
-           <tr>
-               <td>{{ g_data.id }}</td>
-               <td>{{ g_data.groc_sales_date }}</td>
-               <td>{{ g_data.groc_daily_sales }}</td>
-           </tr>
-            {% endfor %}
-        </table>
-    </form>
-
-    <a href="{% url 'export_csv_grocery' %}">
-        <button class="btn btn-primary mt-1">Download CSV</button>
-    </a>
-
-</div > <!-- END // container -->
 {% endblock content %}
 
 <!-- Car wash Block -->

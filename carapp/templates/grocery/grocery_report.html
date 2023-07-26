@@ -41,48 +41,67 @@
 <!-- Page Content -->
 {% block content %}
 
-<br>
-<div class="container mb-5" style="width: 95%; font-size: 14px">
-    <!-- Display Restaurant Report -->
-    <button class="btn btn-warning w-100 mt-4 mb-2 no-pointer">
-        <i class="fa-solid fa-file-lines"></i>&nbsp;&nbsp; GROCERY REPORT
-    </button>
+{% if is_superuser %}
+    <div class="container mt-5">
+        <!-- Content accessible only by superusers -->
+        <h1>Hello Superuser!</h1>
+        <p>This content is only visible to superusers.</p>
+    </div>
 
-    <hr>
-    <div>
-        <form method="POST">
-            {% csrf_token %}
-            From: <input type="date" name="from_date">
-            To: <input type="date" name="to_date">
-            <input type="submit" value="Search">
+    <br>
+    <div class="container mb-5" style="width: 95%; font-size: 14px">
+        <!-- Display Restaurant Report -->
+        <button class="btn btn-warning w-100 mt-4 mb-2 no-pointer">
+            <i class="fa-solid fa-file-lines"></i>&nbsp;&nbsp; GROCERY REPORT
+        </button>
 
-            <hr>
-            <table border="2">
-                <tr>
-                    <th>ID</th>
-                    <th>Sales Date</th>
-                    <th>Total Sales</th>
-                    <th>Total Expenses</th>
-                    <th>Net Sales</th>
-                </tr>
-                {% for g_data in groc_data %}
-               <tr>
-                   <td>{{ g_data.id }}</td>
-                   <td>{{ g_data.groc_sales_date }}</td>
-                   <td>{{ g_data.groc_daily_sales }}</td>
-                   <td>{{ g_data.groc_daily_expenses }}</td>
-                   <td>{{ g_data.groc_net_sales }}</td>
-               </tr>
-                {% endfor %}
-            </table>
-        </form>
-        <a href="{% url 'export_csv_grocery' %}">
-            <button class="btn btn-primary mt-1">Download CSV</button>
+        <hr>
+        <div>
+            <form method="POST">
+                {% csrf_token %}
+                From: <input type="date" name="from_date">
+                To: <input type="date" name="to_date">
+                <input type="submit" value="Search">
+
+                <hr>
+                <table border="2">
+                    <tr>
+                        <th>ID</th>
+                        <th>Sales Date</th>
+                        <th>Total Sales</th>
+                        <th>Total Expenses</th>
+                        <th>Net Sales</th>
+                    </tr>
+                    {% for g_data in groc_data %}
+                   <tr>
+                       <td>{{ g_data.id }}</td>
+                       <td>{{ g_data.groc_sales_date }}</td>
+                       <td>{{ g_data.groc_daily_sales }}</td>
+                       <td>{{ g_data.groc_daily_expenses }}</td>
+                       <td>{{ g_data.groc_net_sales }}</td>
+                   </tr>
+                    {% endfor %}
+                </table>
+            </form>
+            <a href="{% url 'export_csv_grocery' %}">
+                <button class="btn btn-primary mt-1">Download CSV</button>
+            </a>
+        </div>
+        <!--Section 2 (next class)-->
+
+    </div>
+{% else %}
+    <div class="container mt-5 mb-5">
+        <!-- Content accessible by regular users -->
+        <h1>Hello Regular User!</h1>
+        <p>Content Restricted</p>
+
+        <a href="{% url 'backend' %}">
+            <button class="btn btn-primary mb-1 ml-5">Go Back</button>
         </a>
     </div>
-    <!--Section 2 (next class)-->
+{% endif %}
 
-</div>
 {% endblock content %}
 
 <!-- Car wash Block -->
